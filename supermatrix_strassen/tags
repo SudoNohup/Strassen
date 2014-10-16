@@ -11,24 +11,29 @@ FC	makefile	/^FC         := gfortran$/;"	m
 FFLAGS	makefile	/^FFLAGS     := $(CFLAGS)$/;"	m
 FLAME_INC	makefile	/^FLAME_INC  := $(HOME)\/flame\/include$/;"	m
 FLAME_LIB	makefile	/^FLAME_LIB  := $(HOME)\/flame\/lib\/libflame.a$/;"	m
-FLA_Cont_with_1x3_to_1x2	FLA_View.c	/^FLA_Error FLA_Cont_with_1x3_to_1x2( FLA_Obj *AL,              FLA_Obj *AR,$/;"	f
-FLA_Cont_with_3x1_to_2x1	FLA_View.c	/^FLA_Error FLA_Cont_with_3x1_to_2x1( FLA_Obj *AT,  FLA_Obj A0,$/;"	f
-FLA_Cont_with_3x3_to_2x2	FLA_View.c	/^FLA_Error FLA_Cont_with_3x3_to_2x2( FLA_Obj *ATL, FLA_Obj *ATR,  FLA_Obj A00, FLA_Obj A01, FLA_Obj A02,$/;"	f
-FLA_Merge_1x2	FLA_View.c	/^FLA_Error FLA_Merge_1x2( FLA_Obj AL, FLA_Obj AR,   FLA_Obj *A )$/;"	f
-FLA_Merge_2x1	FLA_View.c	/^FLA_Error FLA_Merge_2x1( FLA_Obj AT,$/;"	f
-FLA_Merge_2x2	FLA_View.c	/^FLA_Error FLA_Merge_2x2( FLA_Obj A11, FLA_Obj A12,$/;"	f
-FLA_Part_1x2	FLA_View.c	/^FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,$/;"	f
-FLA_Part_2x1	FLA_View.c	/^FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1, $/;"	f
-FLA_Part_2x2	FLA_View.c	/^FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
-FLA_Part_Even_2x2	fmm.c	/^FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
-FLA_Part_Even_2x2_check	fmm.c	/^FLA_Error FLA_Part_Even_2x2_check( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
-FLA_Repart_1x2_to_1x3	FLA_View.c	/^FLA_Error FLA_Repart_1x2_to_1x3( FLA_Obj  AL,              FLA_Obj  AR,$/;"	f
-FLA_Repart_2x1_to_3x1	FLA_View.c	/^FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,$/;"	f
-FLA_Repart_2x2_to_3x3	FLA_View.c	/^FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Obj *A01, FLA_Obj *A02,$/;"	f
-FLA_Strassen	fmm.c	/^FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C) {$/;"	f
+FLASH_Strassen	fmm.c	/^FLA_Error FLASH_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, Strassen_Workspace *wks, dim_t nb_alg) {$/;"	f
+FLA_Part_Even_2x2	Strassen_partition.c	/^FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
+FLA_Part_Even_2x2_check	Strassen_partition.c	/^FLA_Error FLA_Part_Even_2x2_check( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
 LDFLAGS	makefile	/^LDFLAGS      := -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7 -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7\/..\/..\/..\/x86_64-linux-gnu -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7\/..\/..\/..\/..\/lib -L\/lib\/x86_64-linux-gnu -L\/lib\/..\/lib -L\/usr\/lib\/x86_64-linux-gnu -L\/usr\/lib\/..\/lib -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7\/..\/..\/.. -lgfortranbegin -lgfortran -lquadmath -lpthread -lm$/;"	m
 LINKER	makefile	/^LINKER     := $(CC)$/;"	m
 OBJ_PATH	makefile	/^OBJ_PATH   := .$/;"	m
 SRC_PATH	makefile	/^SRC_PATH   := .$/;"	m
+STRASSEN_H	Strassen_prototypes.h	2;"	d
+Strassen_Elem	Strassen_prototypes.h	/^typedef struct elem_s Strassen_Elem;$/;"	t	typeref:struct:elem_s
+Strassen_Workspace	Strassen_prototypes.h	/^typedef struct workspace_s Strassen_Workspace;$/;"	t	typeref:struct:workspace_s
+Strassen_Workspace_free	Strassen_workspace.c	/^void Strassen_Workspace_free(Strassen_Workspace *wks) {$/;"	f
+Strassen_Workspace_new	Strassen_workspace.c	/^Strassen_Workspace* Strassen_Workspace_new() {$/;"	f
+Strassen_allocateObj	Strassen_workspace.c	/^void Strassen_allocateObj(Strassen_Workspace *wks, FLA_Obj *obj, FLA_Obj *objH, int nb_alg) {$/;"	f
+Strassen_releaseObj	Strassen_workspace.c	/^void Strassen_releaseObj(Strassen_Elem *elem) {$/;"	f
 TEST_OBJS	makefile	/^TEST_OBJS    := $(patsubst $(SRC_PATH)\/%.c, $(OBJ_PATH)\/%.o, $(wildcard $(SRC_PATH)\/*.c))$/;"	m
+elem_s	Strassen_prototypes.h	/^struct elem_s {$/;"	s
+head	Strassen_prototypes.h	/^  struct elem_s *head;$/;"	m	struct:workspace_s	typeref:struct:workspace_s::elem_s
 main	driver.c	/^int main() {$/;"	f
+next	Strassen_prototypes.h	/^  struct  elem_s *next;$/;"	m	struct:elem_s	typeref:struct:elem_s::elem_s
+obj	Strassen_prototypes.h	/^  FLA_Obj *obj;$/;"	m	struct:elem_s
+objH	Strassen_prototypes.h	/^  FLA_Obj *objH;$/;"	m	struct:elem_s
+prev	Strassen_prototypes.h	/^  struct  elem_s *prev;$/;"	m	struct:elem_s	typeref:struct:elem_s::elem_s
+size	Strassen_prototypes.h	/^  int size;$/;"	m	struct:workspace_s
+tail	Strassen_prototypes.h	/^  struct elem_s *tail;$/;"	m	struct:workspace_s	typeref:struct:workspace_s::elem_s
+workspace_error	Strassen_workspace.c	/^void workspace_error(char* func_name, char* msg) {$/;"	f
+workspace_s	Strassen_prototypes.h	/^struct workspace_s {$/;"	s
