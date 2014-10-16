@@ -1,35 +1,14 @@
 #include "FLAME.h"
 #include "Strassen_prototypes.h"
-#include "partition.c"
 
 //FLA_Error FLA_Part_even_2x2( FLA_Obj A, FLA_Obj *A11, FLA_Obj *A12, FLA_Obj *A21, FLA_Obj *A22, dim_t mb, dim_t nb
+//
 
 
-FLA_Error FLA_Part_Even_2x2_check( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
-                                          FLA_Obj *A21, FLA_Obj *A22,
-                              dim_t  mb,  dim_t     nb )
-{
-  FLA_Error e_val;
 
-  e_val = FLA_Check_valid_object_datatype( A );
-  FLA_Check_error_code( e_val );
-
-  e_val = FLA_Check_null_pointer( A11 );
-  FLA_Check_error_code( e_val );
-
-  e_val = FLA_Check_null_pointer( A12 );
-  FLA_Check_error_code( e_val );
-
-  e_val = FLA_Check_null_pointer( A21 );
-  FLA_Check_error_code( e_val );
-
-  e_val = FLA_Check_null_pointer( A22 );
-  FLA_Check_error_code( e_val );
-
-  return FLA_SUCCESS;
-}
-
-
+extern fla_copy_t* flash_copy_cntl;
+extern fla_axpy_t* flash_axpy_cntl;
+extern fla_gemm_t* flash_gemm_cntl_mm_op;
 
 //Workspace...
 FLA_Error FLASH_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, Strassen_Workspace *wks, dim_t nb_alg) {
@@ -37,12 +16,12 @@ FLA_Error FLASH_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, Strassen_Workspace *wk
   FLA_Obj A11H, A12H, A21H, A22H;
   FLA_Obj B11H, B12H, B21H, B22H;
   FLA_Obj C11H, C12H, C21H, C22H;
-  FLA_Obj *S1, *S2, *S3, *S4, *S5, *S6, *S7;
-  FLA_Obj *S1H, *S2H, *S3H, *S4H, *S5H, *S6H, *S7H;
-  FLA_Obj *T1, *T2, *T3, *T4, *T5, *T6, *T7;
-  FLA_Obj *T1H, *T2H, *T3H, *T4H, *T5H, *T6H, *T7H;
-  FLA_Obj *M1, *M2, *M3, *M4, *M5, *M6, *M7;
-  FLA_Obj *M1H, *M2H, *M3H, *M4H, *M5H, *M6H, *M7H;
+  FLA_Obj S1, S2, S3, S4, S5, S6, S7;
+  FLA_Obj S1H, S2H, S3H, S4H, S5H, S6H, S7H;
+  FLA_Obj T1, T2, T3, T4, T5, T6, T7;
+  FLA_Obj T1H, T2H, T3H, T4H, T5H, T6H, T7H;
+  FLA_Obj M1, M2, M3, M4, M5, M6, M7;
+  FLA_Obj M1H, M2H, M3H, M4H, M5H, M6H, M7H;
 
   //we need to check the dimension of A, B, C ?? (mxn) * (nxk) = (m*k);
 
@@ -71,29 +50,27 @@ FLA_Error FLASH_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, Strassen_Workspace *wk
 
   n = FLA_Obj_length( A ) / 2;
 
-  Strassen_allocateObj(wks, S1, S1H, n);
-  Strassen_allocateObj(wks, S2, S2H, n);
-  Strassen_allocateObj(wks, S3, S3H, n);
-  Strassen_allocateObj(wks, S4, S4H, n);
-  Strassen_allocateObj(wks, S5, S5H, n);
-  Strassen_allocateObj(wks, S6, S6H, n);
-  Strassen_allocateObj(wks, S7, S7H, n);
-
-  Strassen_allocateObj(wks, T1, T1H, n);
-  Strassen_allocateObj(wks, T2, T2H, n);
-  Strassen_allocateObj(wks, T3, T3H, n);
-  Strassen_allocateObj(wks, T4, T4H, n);
-  Strassen_allocateObj(wks, T5, T5H, n);
-  Strassen_allocateObj(wks, T6, T6H, n);
-  Strassen_allocateObj(wks, T7, T7H, n);
-
-  Strassen_allocateObj(wks, M1, M1H, n);
-  Strassen_allocateObj(wks, M2, M2H, n);
-  Strassen_allocateObj(wks, M3, M3H, n);
-  Strassen_allocateObj(wks, M4, M4H, n);
-  Strassen_allocateObj(wks, M5, M5H, n);
-  Strassen_allocateObj(wks, M6, M6H, n);
-  Strassen_allocateObj(wks, M7, M7H, n);
+  Strassen_allocateObj(wks, &S1, &S1H, n);
+  Strassen_allocateObj(wks, &S2, &S2H, n);
+  Strassen_allocateObj(wks, &S3, &S3H, n);
+  Strassen_allocateObj(wks, &S4, &S4H, n);
+  Strassen_allocateObj(wks, &S5, &S5H, n);
+  Strassen_allocateObj(wks, &S6, &S6H, n);
+  Strassen_allocateObj(wks, &S7, &S7H, n);
+  Strassen_allocateObj(wks, &T1, &T1H, n);
+  Strassen_allocateObj(wks, &T2, &T2H, n);
+  Strassen_allocateObj(wks, &T3, &T3H, n);
+  Strassen_allocateObj(wks, &T4, &T4H, n);
+  Strassen_allocateObj(wks, &T5, &T5H, n);
+  Strassen_allocateObj(wks, &T6, &T6H, n);
+  Strassen_allocateObj(wks, &T7, &T7H, n);
+  Strassen_allocateObj(wks, &M1, &M1H, n);
+  Strassen_allocateObj(wks, &M2, &M2H, n);
+  Strassen_allocateObj(wks, &M3, &M3H, n);
+  Strassen_allocateObj(wks, &M4, &M4H, n);
+  Strassen_allocateObj(wks, &M5, &M5H, n);
+  Strassen_allocateObj(wks, &M6, &M6H, n);
+  Strassen_allocateObj(wks, &M7, &M7H, n);
 
 
   FLA_Part_Even_2x2( A,  &A11H, &A12H,
@@ -105,76 +82,75 @@ FLA_Error FLASH_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, Strassen_Workspace *wk
   FLA_Part_Even_2x2( C,  &C11H, &C12H,
 	                     &C21H, &C22H);
 
-  FLA_Copy_internal(A11H, *S1H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, A22H, *S1H, flash_axpy_cntl);
+  FLA_Copy_internal(A11H, S1H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, A22H, S1H, flash_axpy_cntl);
 
-  FLA_Copy_internal(A11H, *S1H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, A22H, *S1H, flash_axpy_cntl);
+  FLA_Copy_internal(A11H, S1H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, A22H, S1H, flash_axpy_cntl);
 
-  FLA_Copy_internal(A21H, *S2H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, A22H, *S2H, flash_axpy_cntl);
+  FLA_Copy_internal(A21H, S2H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, A22H, S2H, flash_axpy_cntl);
 
-  FLA_Copy_internal(A11H, *S3H, flash_copy_cntl);
+  FLA_Copy_internal(A11H, S3H, flash_copy_cntl);
 
-  FLA_Copy_internal(A22H, *S4H, flash_copy_cntl);
+  FLA_Copy_internal(A22H, S4H, flash_copy_cntl);
 
-  FLA_Copy_internal(A11H, *S5H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, A12H, *S5H, flash_axpy_cntl);
+  FLA_Copy_internal(A11H, S5H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, A12H, S5H, flash_axpy_cntl);
 
-  FLA_Copy_internal(A21H, *S6H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_MINUS_ONE, A11H, *S6H, flash_axpy_cntl);
+  FLA_Copy_internal(A21H, S6H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_MINUS_ONE, A11H, S6H, flash_axpy_cntl);
 
-  FLA_Copy_internal(A12H, *S7H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_MINUS_ONE, A22H, *S7H, flash_axpy_cntl);
+  FLA_Copy_internal(A12H, S7H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_MINUS_ONE, A22H, S7H, flash_axpy_cntl);
 
-  FLA_Copy_internal(B11H, *T1H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, B22H, *T1H, flash_axpy_cntl);
+  FLA_Copy_internal(B11H, T1H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, B22H, T1H, flash_axpy_cntl);
 
-  FLA_Copy_internal(B11H, *T2H, flash_copy_cntl);
+  FLA_Copy_internal(B11H, T2H, flash_copy_cntl);
 
-  FLA_Copy_internal(B12H, *T3H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_MINUS_ONE, B22H, *T3H, flash_axpy_cntl);
+  FLA_Copy_internal(B12H, T3H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_MINUS_ONE, B22H, T3H, flash_axpy_cntl);
 
-  FLA_Copy_internal(B21H, *T4H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_MINUS_ONE, B11H, *T4H, flash_axpy_cntl);
+  FLA_Copy_internal(B21H, T4H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_MINUS_ONE, B11H, T4H, flash_axpy_cntl);
 
-  FLA_Copy_internal(B22H, *T5H, flash_copy_cntl);
+  FLA_Copy_internal(B22H, T5H, flash_copy_cntl);
 
-  FLA_Copy_internal(B11H, *T6H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, B12H, *T6H, flash_axpy_cntl);
+  FLA_Copy_internal(B11H, T6H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, B12H, T6H, flash_axpy_cntl);
 
-  FLA_Copy_internal(B21H, *T7H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, B22H, *T7H, flash_axpy_cntl);
+  FLA_Copy_internal(B21H, T7H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, B22H, T7H, flash_axpy_cntl);
 
-  FLASH_Strassen(S1H, *T1H, *M1H, wks, nb_alg);
-  FLASH_Strassen(S2H, *T2H, *M2H, wks, nb_alg);
-  FLASH_Strassen(S3H, *T3H, *M3H, wks, nb_alg);
-  FLASH_Strassen(S4H, *T4H, *M4H, wks, nb_alg);
-  FLASH_Strassen(S5H, *T5H, *M5H, wks, nb_alg);
-  FLASH_Strassen(S6H, *T6H, *M6H, wks, nb_alg);
-  FLASH_Strassen(S7H, *T7H, *M7H, wks, nb_alg);
+  FLASH_Strassen(S1H, T1H, M1H, wks, nb_alg);
+  FLASH_Strassen(S2H, T2H, M2H, wks, nb_alg);
+  FLASH_Strassen(S3H, T3H, M3H, wks, nb_alg);
+  FLASH_Strassen(S4H, T4H, M4H, wks, nb_alg);
+  FLASH_Strassen(S5H, T5H, M5H, wks, nb_alg);
+  FLASH_Strassen(S6H, T6H, M6H, wks, nb_alg);
+  FLASH_Strassen(S7H, T7H, M7H, wks, nb_alg);
 
 
-  FLA_Copy_internal(*M1H, C11H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, *M4, C11, flash_axpy_cntl);
-  FLA_Axpy_internal(FLA_MINUS_ONE, *M5, C11, flash_axpy_cntl);
-  FLA_Axpy_internal(FLA_ONE, *M7, C11, flash_axpy_cntl);
+  FLA_Copy_internal(M1H, C11H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, M4, C11H, flash_axpy_cntl);
+  FLA_Axpy_internal(FLA_MINUS_ONE, M5, C11H, flash_axpy_cntl);
+  FLA_Axpy_internal(FLA_ONE, M7, C11H, flash_axpy_cntl);
 
-  FLA_Copy_internal(*M3H, C12H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, *M5H, C12H, flash_axpy_cntl);
+  FLA_Copy_internal(M3H, C12H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, M5H, C12H, flash_axpy_cntl);
 
-  FLA_Copy_internal(*M2H, C21H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_ONE, *M4H, C21H, flash_axpy_cntl);
+  FLA_Copy_internal(M2H, C21H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_ONE, M4H, C21H, flash_axpy_cntl);
 
-  FLA_Copy_internal(*M1H, C22H, flash_copy_cntl);
-  FLA_Axpy_internal(FLA_MINUS_ONE, *M2H, C22H, flash_axpy_cntl);
-  FLA_Axpy_internal(FLA_ONE, *M3H, C22H, flash_axpy_cntl);
-  FLA_Axpy_internal(FLA_ONE, *M6H, C22H, flash_axpy_cntl);
+  FLA_Copy_internal(M1H, C22H, flash_copy_cntl);
+  FLA_Axpy_internal(FLA_MINUS_ONE, M2H, C22H, flash_axpy_cntl);
+  FLA_Axpy_internal(FLA_ONE, M3H, C22H, flash_axpy_cntl);
+  FLA_Axpy_internal(FLA_ONE, M6H, C22H, flash_axpy_cntl);
 
   return FLA_SUCCESS;
 
 }
-
 
 
 

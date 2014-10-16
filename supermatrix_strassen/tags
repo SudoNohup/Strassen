@@ -1,0 +1,34 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BLAS_LIB	makefile	/^BLAS_LIB   := $(HOME)\/flame\/lib\/libopenblas.a$/;"	m
+CC	makefile	/^CC         := gcc$/;"	m
+CFLAGS	makefile	/^CFLAGS     := -O3 -Wall -I$(FLAME_INC) -msse3$/;"	m
+FC	makefile	/^FC         := gfortran$/;"	m
+FFLAGS	makefile	/^FFLAGS     := $(CFLAGS)$/;"	m
+FLAME_INC	makefile	/^FLAME_INC  := $(HOME)\/flame\/include$/;"	m
+FLAME_LIB	makefile	/^FLAME_LIB  := $(HOME)\/flame\/lib\/libflame.a$/;"	m
+FLA_Cont_with_1x3_to_1x2	FLA_View.c	/^FLA_Error FLA_Cont_with_1x3_to_1x2( FLA_Obj *AL,              FLA_Obj *AR,$/;"	f
+FLA_Cont_with_3x1_to_2x1	FLA_View.c	/^FLA_Error FLA_Cont_with_3x1_to_2x1( FLA_Obj *AT,  FLA_Obj A0,$/;"	f
+FLA_Cont_with_3x3_to_2x2	FLA_View.c	/^FLA_Error FLA_Cont_with_3x3_to_2x2( FLA_Obj *ATL, FLA_Obj *ATR,  FLA_Obj A00, FLA_Obj A01, FLA_Obj A02,$/;"	f
+FLA_Merge_1x2	FLA_View.c	/^FLA_Error FLA_Merge_1x2( FLA_Obj AL, FLA_Obj AR,   FLA_Obj *A )$/;"	f
+FLA_Merge_2x1	FLA_View.c	/^FLA_Error FLA_Merge_2x1( FLA_Obj AT,$/;"	f
+FLA_Merge_2x2	FLA_View.c	/^FLA_Error FLA_Merge_2x2( FLA_Obj A11, FLA_Obj A12,$/;"	f
+FLA_Part_1x2	FLA_View.c	/^FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,$/;"	f
+FLA_Part_2x1	FLA_View.c	/^FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1, $/;"	f
+FLA_Part_2x2	FLA_View.c	/^FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
+FLA_Part_Even_2x2	fmm.c	/^FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
+FLA_Part_Even_2x2_check	fmm.c	/^FLA_Error FLA_Part_Even_2x2_check( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,$/;"	f
+FLA_Repart_1x2_to_1x3	FLA_View.c	/^FLA_Error FLA_Repart_1x2_to_1x3( FLA_Obj  AL,              FLA_Obj  AR,$/;"	f
+FLA_Repart_2x1_to_3x1	FLA_View.c	/^FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,$/;"	f
+FLA_Repart_2x2_to_3x3	FLA_View.c	/^FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Obj *A01, FLA_Obj *A02,$/;"	f
+FLA_Strassen	fmm.c	/^FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C) {$/;"	f
+LDFLAGS	makefile	/^LDFLAGS      := -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7 -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7\/..\/..\/..\/x86_64-linux-gnu -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7\/..\/..\/..\/..\/lib -L\/lib\/x86_64-linux-gnu -L\/lib\/..\/lib -L\/usr\/lib\/x86_64-linux-gnu -L\/usr\/lib\/..\/lib -L\/usr\/lib\/gcc\/x86_64-linux-gnu\/4.7\/..\/..\/.. -lgfortranbegin -lgfortran -lquadmath -lpthread -lm$/;"	m
+LINKER	makefile	/^LINKER     := $(CC)$/;"	m
+OBJ_PATH	makefile	/^OBJ_PATH   := .$/;"	m
+SRC_PATH	makefile	/^SRC_PATH   := .$/;"	m
+TEST_OBJS	makefile	/^TEST_OBJS    := $(patsubst $(SRC_PATH)\/%.c, $(OBJ_PATH)\/%.o, $(wildcard $(SRC_PATH)\/*.c))$/;"	m
+main	driver.c	/^int main() {$/;"	f

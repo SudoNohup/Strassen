@@ -59,16 +59,19 @@ int main() {
 
 	Strassen_Workspace *wks = Strassen_Workspace_new();
 
-	FLASH_Obj_create_without_buffer( FLA_Obj_datetype(A), FLA_Obj_length(A), FLA_Obj_width(A), 1, &nb_alg, &AH );
-	FLASH_attach_buffer(FLA_Obj_buffer_at_view(A), FLA_Obj_row_stride(A), FLA_Obj_col_stride(A), &AH);
-	FLASH_Obj_create_without_buffer( FLA_Obj_datetype(B), FLA_Obj_length(B), FLA_Obj_width(B), 1, &nb_alg, &BH );
-	FLASH_attach_buffer(FLA_Obj_buffer_at_view(B), FLA_Obj_row_stride(B), FLA_Obj_col_stride(B), &BH);
-	FLASH_Obj_create_without_buffer( FLA_Obj_datetype(C), FLA_Obj_length(C), FLA_Obj_width(C), 1, &nb_alg, &CH );
-	FLASH_attach_buffer(FLA_Obj_buffer_at_view(C), FLA_Obj_row_stride(C), FLA_Obj_col_stride(C), &CH);
+	FLASH_Obj_create_without_buffer( FLA_Obj_datatype(A), FLA_Obj_length(A), FLA_Obj_width(A), 1, &nb_alg, &AH );
+	FLASH_Obj_attach_buffer(FLA_Obj_buffer_at_view(A), FLA_Obj_row_stride(A), FLA_Obj_col_stride(A), &AH);
+	FLASH_Obj_create_without_buffer( FLA_Obj_datatype(B), FLA_Obj_length(B), FLA_Obj_width(B), 1, &nb_alg, &BH );
+	FLASH_Obj_attach_buffer(FLA_Obj_buffer_at_view(B), FLA_Obj_row_stride(B), FLA_Obj_col_stride(B), &BH);
+	FLASH_Obj_create_without_buffer( FLA_Obj_datatype(C), FLA_Obj_length(C), FLA_Obj_width(C), 1, &nb_alg, &CH );
+	FLASH_Obj_attach_buffer(FLA_Obj_buffer_at_view(C), FLA_Obj_row_stride(C), FLA_Obj_col_stride(C), &CH);
 
-	FLASH_Strassen(A, B, C, wks, nb_alg);
+	FLASH_Strassen(AH, BH, CH, wks, nb_alg);
+
+
 	FLASH_Queue_end();
 	dtime = FLA_Clock() - dtime;
+	Strassen_Workspace_free(wks);
 
 	if(ireps == 0)
 	  dtime_best = dtime;
