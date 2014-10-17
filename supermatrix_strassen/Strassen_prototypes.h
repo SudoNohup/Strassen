@@ -19,7 +19,7 @@ typedef struct elem_s Strassen_Elem;
 typedef struct workspace_s Strassen_Workspace;
 
 Strassen_Workspace* Strassen_Workspace_new();
-void Strassen_allocateObj(Strassen_Workspace *wks, FLA_Obj *obj, FLA_Obj *objH, int n);
+void Strassen_allocateObj(Strassen_Workspace *wks, FLA_Obj *obj, FLA_Obj *objH, int n, int nb_alg);
 void Strassen_releaseObj(Strassen_Elem *elem);
 void Strassen_Workspace_free(Strassen_Workspace *wks);
 

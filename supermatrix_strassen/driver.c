@@ -15,7 +15,16 @@ int main() {
 
   FLA_Init();
 
-  n = 128;
+  FLASH_Queue_set_num_threads( 1 );
+  FLASH_Queue_set_sorting( 0 );
+  FLASH_Queue_set_caching( 0 );
+  FLASH_Queue_set_work_stealing( 0 );
+  FLASH_Queue_set_data_affinity( 0 );
+  FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_NONE);
+  //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_READABLE);
+  //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_ELSE);
+
+  n = 8;
   nb_alg = 4;
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
@@ -68,10 +77,19 @@ int main() {
 
 	FLASH_Strassen(AH, BH, CH, wks, nb_alg);
 
+	
+	Strassen_Workspace_print(wks);
+
+	printf("before execution stage!\n");
 
 	FLASH_Queue_end();
+
+	printf("out of execution stage!\n");
 	dtime = FLA_Clock() - dtime;
 	Strassen_Workspace_free(wks);
+
+	printf("free workspace!\n");
+
 
 	if(ireps == 0)
 	  dtime_best = dtime;
