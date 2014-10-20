@@ -38,7 +38,7 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
   */
 
   if ( FLA_Obj_length(*AH) <= 1 ) {
-	printf("Enter the base of recursion!\n");
+	//printf("Enter the base of recursion!\n");
 	FLA_Gemm_internal( FLA_NO_TRANSPOSE, FLA_NO_TRANSPOSE, FLA_ONE, *AH, *BH, FLA_ONE, *CH, flash_gemm_cntl_mm_op);
 	//printf("C(%d %d)", C.offm, C.offn);
 	//FLA_Obj_show("A:", A, "%11.3e", "...END...");
@@ -97,11 +97,11 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
   //printf("flag1\n");
   FLA_Copy_internal(A11H, *S1H, flash_copy_cntl);
 
-  FLASH_print_struct(A11H);
-  FLASH_print_struct(*S1H);
+  //FLASH_print_struct(A11H);
+  //FLASH_print_struct(*S1H);
 
-  FLA_Obj_show("A11:", *FLASH_OBJ_PTR_AT(A11H), "%11.3e", "...END...");
-  FLA_Obj_show("S1:", *S1, "%11.3e", "...END...");
+  //FLA_Obj_show("A11:", *FLASH_OBJ_PTR_AT(A11H), "%11.3e", "...END...");
+  //FLA_Obj_show("S1:", *S1, "%11.3e", "...END...");
   //We need to verify the Copy result here...
 
   //printf("flag2\n");
