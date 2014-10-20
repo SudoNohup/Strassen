@@ -86,7 +86,7 @@ FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
 }
 
 
-FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C) {
+FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, dim_t nb) {
   int n;
   FLA_Obj A11, A12, A21, A22;
   FLA_Obj B11, B12, B21, B22;
@@ -99,7 +99,7 @@ FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C) {
 
   // Resursive base
   // A's dimension is less than 128, assume this is a square matrix....
-  if ( FLA_Obj_length(A) <= 256 ) {
+  if ( FLA_Obj_length(A) <= nb ) {
 	FLA_Gemm( FLA_NO_TRANSPOSE, FLA_NO_TRANSPOSE, FLA_ONE, A, B, FLA_ONE, C);
 	//printf("C(%d %d)", C.offm, C.offn);
 	//FLA_Obj_show("A:", A, "%11.3e", "...END...");
@@ -205,29 +205,29 @@ FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C) {
   FLA_Copy(B21, T7);
   FLA_Axpy(FLA_ONE, B22, T7);
 
-  FLA_Strassen(S1, T1, M1);
+  FLA_Strassen(S1, T1, M1, nb);
 
   //FLA_Obj_show("S1:", S1, "%11.3e", "...END...");
   //FLA_Obj_show("T1:", T1, "%11.3e", "...END...");
   //FLA_Obj_show("M1:", M1, "%11.3e", "...END...");
   //printf("----------------------------------------------------S1, T1-------------------M1\n");
-  FLA_Strassen(S2, T2, M2);
+  FLA_Strassen(S2, T2, M2, nb);
   //FLA_Obj_show("S2:", S2, "%11.3e", "...END...");
   //FLA_Obj_show("T2:", T2, "%11.3e", "...END...");
   //FLA_Obj_show("M2:", M2, "%11.3e", "...END...");
   //printf("----------------------------------------------------S2, T2-------------------M2\n");
   //FLA_Obj_show("M3:", M3, "%11.3e", "...END...");
  
-  FLA_Strassen(S3, T3, M3);
-  FLA_Strassen(S4, T4, M4);
-  FLA_Strassen(S5, T5, M5);
+  FLA_Strassen(S3, T3, M3, nb);
+  FLA_Strassen(S4, T4, M4, nb);
+  FLA_Strassen(S5, T5, M5, nb);
   //FLA_Obj_show("S5:", S5, "%11.3e", "...END...");
   //FLA_Obj_show("T5:", T5, "%11.3e", "...END...");
   //FLA_Obj_show("M5:", M5, "%11.3e", "...END...");
   //printf("----------------------------------------------------S5, T5-------------------M2\n");
  
-  FLA_Strassen(S6, T6, M6);
-  FLA_Strassen(S7, T7, M7);
+  FLA_Strassen(S6, T6, M6, nb);
+  FLA_Strassen(S7, T7, M7, nb);
 
   FLA_Copy(M1, C11);
   FLA_Axpy(FLA_ONE, M4, C11);

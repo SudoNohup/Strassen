@@ -7,7 +7,7 @@
 
 
 int main() {
-  dim_t n;
+  dim_t n, nb;
   int nrepeats, ireps;
   FLA_Obj A, B, C, Cref;
   double diff, dtime, dtime_best, gflops;
@@ -15,6 +15,7 @@ int main() {
   FLA_Init();
 
   n = 1024 * 4;
+  nb = 256;
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &C );
@@ -53,7 +54,7 @@ int main() {
 	FLA_Set( FLA_ZERO, C);
 
 	dtime = FLA_Clock();
-	FLA_Strassen(A, B, C);
+	FLA_Strassen(A, B, C, nb);
 	dtime = FLA_Clock() - dtime;
 
 	if(ireps == 0)
