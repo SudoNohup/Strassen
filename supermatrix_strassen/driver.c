@@ -25,7 +25,7 @@ int main() {
   //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_ELSE);
 
   n = 8;
-  nb_alg = 4;
+  nb_alg = 2;
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &C );
@@ -75,7 +75,7 @@ int main() {
 	FLASH_Obj_create_without_buffer( FLA_Obj_datatype(C), FLA_Obj_length(C), FLA_Obj_width(C), 1, &nb_alg, &CH );
 	FLASH_Obj_attach_buffer(FLA_Obj_buffer_at_view(C), FLA_Obj_row_stride(C), FLA_Obj_col_stride(C), &CH);
 
-	FLASH_Strassen(AH, BH, CH, wks, nb_alg);
+	FLASH_Strassen(&AH, &BH, &CH, wks, nb_alg);
 
 	
 	Strassen_Workspace_print(wks);
@@ -90,6 +90,10 @@ int main() {
 
 	printf("free workspace!\n");
 
+	FLASH_Obj_free_without_buffer( &AH );
+	FLASH_Obj_free_without_buffer( &BH );
+	FLASH_Obj_free_without_buffer( &CH );
+
 
 	if(ireps == 0)
 	  dtime_best = dtime;
@@ -103,6 +107,7 @@ int main() {
   diff = FLA_Max_elemwise_diff( C, Cref );
   printf( "diff = [ %le]\n", diff );
   fflush( stdout );
+
 
   FLA_Obj_free( &A );
   FLA_Obj_free( &B );

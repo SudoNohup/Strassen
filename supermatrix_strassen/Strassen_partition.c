@@ -32,7 +32,7 @@ FLA_Error FLA_Part_Even_2x2_check( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
 
 
 
-FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
+FLA_Error FLA_Part_Even_2x2( FLA_Obj *A,  FLA_Obj *A11, FLA_Obj *A12,
                                     FLA_Obj *A21, FLA_Obj *A22)
    //                     dim_t  mb,  dim_t     nb)
 {
@@ -50,11 +50,13 @@ FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
   //if ( nb > A.n ) nb = A.n;
   //
 
-  m        = A.m;
-  n        = A.n;
-  offm     = A.offm;
-  offn     = A.offn;
-  base     = A.base;
+  m        = A->m;
+  n        = A->n;
+  offm     = A->offm;
+  offn     = A->offn;
+  base     = A->base;
+
+  printf("m:%d\t, n:%d\n", m, n);
 
 
   A11->m    = m / 2;

@@ -6,7 +6,7 @@ FLAME_INC  := $(HOME)/flame/include
 CC         := gcc
 FC         := gfortran
 LINKER     := $(CC)
-CFLAGS     := -O3 -Wall -I$(FLAME_INC) -msse3
+CFLAGS     := -O0 -Wall -I$(FLAME_INC) -msse3
 FFLAGS     := $(CFLAGS)
 
 SRC_PATH   := .
