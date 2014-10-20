@@ -11,7 +11,7 @@ extern fla_gemm_t* flash_gemm_cntl_mm_op;
 
 //Workspace...
 FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspace *wks, dim_t nb_alg) {
-  int n;
+  dim_t n;
   FLA_Obj A11H, A12H, A21H, A22H;
   FLA_Obj B11H, B12H, B21H, B22H;
   FLA_Obj C11H, C12H, C21H, C22H;
@@ -51,9 +51,7 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
   //n = FLA_Obj_length( *FLASH_OBJ_PTR_AT( A ) ) / 2;
   n = FLA_Obj_length( *AH ) / 2 * nb_alg;
 
-  printf("n_dim: %d\n", n);
-
-
+  //printf("n_dim: %d\n", n);
   //printf("S1 addr: %d\n", S1);
   //printf("S1 addr: %d\n", S2);
   //printf("S1H addr: %d\n", S1H);
@@ -90,15 +88,13 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
 	                     &C21H, &C22H);
 
 
-  printf("A11H_m:%d\n", FLA_Obj_length(A11H));
+  //printf("A11H_m:%d\n", FLA_Obj_length(A11H));
+  //printf("S1H addr: %d\n", S1H);
+  //printf("S1H_m:%d\n", FLA_Obj_length(*S1H));
+  //printf("A11H_n:%d\n:", FLA_Obj_width(A11H));
+  //printf("S1H_n:%d\n", FLA_Obj_width(*S1H));
 
-  printf("S1H addr: %d\n", S1H);
-  printf("S1H_m:%d\n", FLA_Obj_length(*S1H));
-
-  printf("A11H_n:%d\n:", FLA_Obj_width(A11H));
-  printf("S1H_n:%d\n", FLA_Obj_width(*S1H));
-
-  printf("flag1\n");
+  //printf("flag1\n");
   FLA_Copy_internal(A11H, *S1H, flash_copy_cntl);
 
   FLASH_print_struct(A11H);
@@ -108,14 +104,14 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
   FLA_Obj_show("S1:", *S1, "%11.3e", "...END...");
   //We need to verify the Copy result here...
 
-  printf("flag2\n");
+  //printf("flag2\n");
   FLA_Axpy_internal(FLA_ONE, A22H, *S1H, flash_axpy_cntl);
-  printf("flag3\n");
+  //printf("flag3\n");
 
 
   FLA_Copy_internal(A21H, *S2H, flash_copy_cntl);
 
-  printf("flag4\n");
+  //printf("flag4\n");
   FLA_Axpy_internal(FLA_ONE, A22H, *S2H, flash_axpy_cntl);
 
   FLA_Copy_internal(A11H, *S3H, flash_copy_cntl);
@@ -152,7 +148,7 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
   FLA_Axpy_internal(FLA_ONE, B22H, *T7H, flash_axpy_cntl);
 
 
-  printf("flag5\n");
+  //printf("flag5\n");
 
   FLASH_Strassen(S1H, T1H, M1H, wks, nb_alg);
   FLASH_Strassen(S2H, T2H, M2H, wks, nb_alg);
@@ -162,21 +158,21 @@ FLA_Error FLASH_Strassen(FLA_Obj *AH, FLA_Obj *BH, FLA_Obj *CH, Strassen_Workspa
   FLASH_Strassen(S6H, T6H, M6H, wks, nb_alg);
   FLASH_Strassen(S7H, T7H, M7H, wks, nb_alg);
 
-  printf("flag6\n");
+  //printf("flag6\n");
 
   FLA_Copy_internal(*M1H, C11H, flash_copy_cntl);
   FLA_Axpy_internal(FLA_ONE, *M4H, C11H, flash_axpy_cntl);
   FLA_Axpy_internal(FLA_MINUS_ONE, *M5H, C11H, flash_axpy_cntl);
   FLA_Axpy_internal(FLA_ONE, *M7H, C11H, flash_axpy_cntl);
 
-  printf("flag7\n");
+  //printf("flag7\n");
   FLA_Copy_internal(*M3H, C12H, flash_copy_cntl);
   FLA_Axpy_internal(FLA_ONE, *M5H, C12H, flash_axpy_cntl);
 
   FLA_Copy_internal(*M2H, C21H, flash_copy_cntl);
   FLA_Axpy_internal(FLA_ONE, *M4H, C21H, flash_axpy_cntl);
 
-  printf("flag8\n");
+  //printf("flag8\n");
   FLA_Copy_internal(*M1H, C22H, flash_copy_cntl);
   FLA_Axpy_internal(FLA_MINUS_ONE, *M2H, C22H, flash_axpy_cntl);
   FLA_Axpy_internal(FLA_ONE, *M3H, C22H, flash_axpy_cntl);

@@ -56,7 +56,7 @@ FLA_Error FLA_Part_Even_2x2( FLA_Obj *A,  FLA_Obj *A11, FLA_Obj *A12,
   offn     = A->offn;
   base     = A->base;
 
-  printf("m:%d\t, n:%d\n", m, n);
+  //printf("m:%d\t, n:%d\n", m, n);
 
 
   A11->m    = m / 2;

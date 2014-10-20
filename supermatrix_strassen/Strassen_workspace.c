@@ -63,9 +63,9 @@ void Strassen_Workspace_print(Strassen_Workspace *wks) {
   Strassen_Elem *elem = wks->head, *next;
   while (elem != NULL) {
 	next = elem->next;
-	printf("elem->obj: %d\n", elem->obj);
-	printf("m:%d\n", FLA_Obj_length(*(elem->obj)));
-	FLA_Obj_show("obj:", *(elem->obj), "%11.3e", "...END...");
+	//printf("elem->obj: %d\n", elem->obj);
+	//printf("m:%d\n", FLA_Obj_length(*(elem->obj)));
+	//FLA_Obj_show("obj:", *(elem->obj), "%11.3e", "...END...");
 	//FLA_Obj_show(*(elem->objH));
 	elem = next;
   }
