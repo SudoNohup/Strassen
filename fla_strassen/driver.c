@@ -15,7 +15,7 @@ int main() {
   FLA_Init();
 
   n = 1024 * 4;
-  nb = 256;
+  //nb = 1024;
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &C );
@@ -48,26 +48,25 @@ int main() {
 
   printf( "FLA_Gemm:\ttime = [%le], flops = [%le]\n", dtime_best, gflops / dtime_best);
 
+  for (nb = 128; nb <= 4096; nb <<= 1) {
+	for (ireps = 0; ireps < nrepeats; ++ireps) {
 
-  for (ireps = 0; ireps < nrepeats; ++ireps) {
+	  FLA_Set( FLA_ZERO, C);
 
-	FLA_Set( FLA_ZERO, C);
+	  dtime = FLA_Clock();
+	  FLA_Strassen(A, B, C, nb);
+	  dtime = FLA_Clock() - dtime;
 
-	dtime = FLA_Clock();
-	FLA_Strassen(A, B, C, nb);
-	dtime = FLA_Clock() - dtime;
-
-	if(ireps == 0)
-	  dtime_best = dtime;
-	else 
-	  dtime_best = dtime < dtime_best ? dtime : dtime_best;
+	  if(ireps == 0)
+		dtime_best = dtime;
+	  else 
+		dtime_best = dtime < dtime_best ? dtime : dtime_best;
+	}
+	printf( "nb:%d\tFLA_Strassen:\ttime = [%le], flops = [%le]\n", nb, dtime_best, gflops / dtime_best);
   }
 
-
-  printf( "FLA_Strassen:\ttime = [%le], flops = [%le]\n", dtime_best, gflops / dtime_best);
-
-  diff = FLA_Max_elemwise_diff( C, Cref );
-  printf( "diff = [ %le]\n", diff );
+  //diff = FLA_Max_elemwise_diff( C, Cref );
+  //printf( "diff = [ %le]\n", diff );
   fflush( stdout );
 
   FLA_Obj_free( &A );

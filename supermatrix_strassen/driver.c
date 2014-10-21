@@ -15,28 +15,28 @@ int main() {
 
   FLA_Init();
 
-  FLASH_Queue_set_num_threads( 1 );
+  FLASH_Queue_set_num_threads( 24 );
   FLASH_Queue_set_sorting( 0 );
   FLASH_Queue_set_caching( 0 );
   FLASH_Queue_set_work_stealing( 0 );
   FLASH_Queue_set_data_affinity( 0 );
-  FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_NONE);
+  //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_NONE);
   //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_READABLE);
   //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_ELSE);
 
-  n = 64;
-  nb_alg = 4;
+  n = 1024 * 4;
+  //nb_alg = 1024;
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &C );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &Cref );
 
-  //FLA_Random_matrix( A );
-  FLA_Set( FLA_ONE, A );
-  //FLA_Random_matrix( B );
-  FLA_Set( FLA_ONE, B );
+  FLA_Random_matrix( A );
+  //FLA_Set( FLA_ONE, A );
+  FLA_Random_matrix( B );
+  //FLA_Set( FLA_ONE, B );
 
-  nrepeats = 1;
+  nrepeats = 5;
   gflops = 2.0 * n * n * n * 1.0e-9;
 
   for (ireps = 0; ireps < nrepeats; ++ireps) {
@@ -44,7 +44,10 @@ int main() {
 	FLA_Set( FLA_ZERO, Cref );
 
 	dtime = FLA_Clock();
+	printf("start FLA_Gemm\n");
 	FLA_Gemm( FLA_NO_TRANSPOSE, FLA_NO_TRANSPOSE, FLA_ONE, A, B, FLA_ONE, Cref );
+	printf("finish FLA_Gemm\n");
+	fflush(stdout);
 	dtime = FLA_Clock() - dtime;
 
 	if(ireps == 0)
@@ -54,10 +57,14 @@ int main() {
 
 	//FLA_Strassen(A, B, C);
   }
-
   printf( "FLA_Gemm:\ttime = [%le], flops = [%le]\n", dtime_best, gflops / dtime_best);
 
 
+  //FLA_Obj_show("Cref:", Cref, "%11.3e", "...END...");
+  //FLA_Obj_show("C:", C, "%11.3e", "...END...");
+
+  //for (nb_alg = 1024; nb_alg <= 1024; nb_alg <<= 1) {
+  for (nb_alg = 128; nb_alg <= 4096; nb_alg <<= 1) {
   for (ireps = 0; ireps < nrepeats; ++ireps) {
 
 	FLA_Set( FLA_ZERO, C);
@@ -100,12 +107,17 @@ int main() {
 	else 
 	  dtime_best = dtime < dtime_best ? dtime : dtime_best;
   }
-
-
-  printf( "FLA_Strassen:\ttime = [%le], flops = [%le]\n", dtime_best, gflops / dtime_best);
-
   diff = FLA_Max_elemwise_diff( C, Cref );
-  printf( "diff = [ %le]\n", diff );
+  //printf( "diff = [ %le]\n", diff );
+
+  printf( "nb_alg:%lu\tFLA_Strassen:\ttime = [%le], flops = [%le], diff = [%le]\n", nb_alg, dtime_best, gflops / dtime_best, diff);
+  }
+
+
+  //FLA_Obj_show("C:", C, "%11.3e", "...END...");
+  //FLA_Obj_show("Cref:", Cref, "%11.3e", "...END...");
+  //diff = FLA_Max_elemwise_diff( C, Cref );
+  //printf( "diff = [ %le]\n", diff );
   fflush( stdout );
 
 
