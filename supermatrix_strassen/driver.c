@@ -5,17 +5,35 @@
 #include "FLAME.h"
 #include "Strassen_prototypes.h"
 
+#include "mkl.h"
 
-int main() {
+
+int main(int argc, char** argv) {
+  int num_sm_threads, num_mkl_threads;
   dim_t n, nb_alg;
   int nrepeats, ireps;
   FLA_Obj A, B, C, Cref;
   FLA_Obj AH, BH, CH;
   double diff, dtime, dtime_best, gflops;
 
+
+  if (argc != 5) {
+	printf("argument number is wrong!\n");
+	exit(0);
+  }
+
+  n               = atoi( argv[1] );
+  nb_alg          = atoi( argv[2] );
+  num_sm_threads  = atoi( argv[3] );
+  num_mkl_threads = atoi( argv[4] ); 
+
   FLA_Init();
 
-  FLASH_Queue_set_num_threads( 24 );
+  FLASH_Queue_set_num_threads(num_sm_threads);
+  mkl_set_num_threads(num_mkl_threads);
+
+
+
   FLASH_Queue_set_sorting( 0 );
   FLASH_Queue_set_caching( 0 );
   FLASH_Queue_set_work_stealing( 0 );
@@ -24,7 +42,7 @@ int main() {
   //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_READABLE);
   //FLASH_Queue_set_verbose_output( FLASH_QUEUE_VERBOSE_ELSE);
 
-  n = 1024 * 4;
+  //n = 1024 * 12;
   //nb_alg = 1024;
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
@@ -36,9 +54,12 @@ int main() {
   FLA_Random_matrix( B );
   //FLA_Set( FLA_ONE, B );
 
-  nrepeats = 5;
+  nrepeats = 3;
   gflops = 2.0 * n * n * n * 1.0e-9;
 
+
+  /*
+  mkl_set_num_threads(16);
   for (ireps = 0; ireps < nrepeats; ++ireps) {
 
 	FLA_Set( FLA_ZERO, Cref );
@@ -58,13 +79,17 @@ int main() {
 	//FLA_Strassen(A, B, C);
   }
   printf( "FLA_Gemm:\ttime = [%le], flops = [%le]\n", dtime_best, gflops / dtime_best);
+  */
 
 
   //FLA_Obj_show("Cref:", Cref, "%11.3e", "...END...");
   //FLA_Obj_show("C:", C, "%11.3e", "...END...");
 
+  
+  //mkl_set_num_threads(4);
+  //for (nb_alg = 1024 * 4 ; nb_alg <= 1024 * 4; nb_alg <<= 1) {
   //for (nb_alg = 1024; nb_alg <= 1024; nb_alg <<= 1) {
-  for (nb_alg = 128; nb_alg <= 4096; nb_alg <<= 1) {
+  //for (nb_alg = 128; nb_alg <= 4096; nb_alg <<= 1) {
   for (ireps = 0; ireps < nrepeats; ++ireps) {
 
 	FLA_Set( FLA_ZERO, C);
@@ -101,17 +126,22 @@ int main() {
 	FLASH_Obj_free_without_buffer( &BH );
 	FLASH_Obj_free_without_buffer( &CH );
 
+	//printf( "res_quickshot:nb_alg:%lu\tFLA_Strassen:\tdtime = [%le], flops = [%le]\n", nb_alg, dtime, gflops / dtime);
+	fflush( stdout );
 
 	if(ireps == 0)
 	  dtime_best = dtime;
 	else 
 	  dtime_best = dtime < dtime_best ? dtime : dtime_best;
   }
-  diff = FLA_Max_elemwise_diff( C, Cref );
+  //diff = FLA_Max_elemwise_diff( C, Cref );
   //printf( "diff = [ %le]\n", diff );
 
-  printf( "nb_alg:%lu\tFLA_Strassen:\ttime = [%le], flops = [%le], diff = [%le]\n", nb_alg, dtime_best, gflops / dtime_best, diff);
-  }
+  //printf( "nb_alg:%lu\tFLA_Strassen:\ttime = [%le], flops = [%le]\n", nb_alg, dtime_best, gflops / dtime_best);
+  printf( "%lu\t%lu\t%d\t%d\t%le\t%le\n", n, nb_alg, num_sm_threads, num_mkl_threads, dtime_best, gflops / dtime_best);
+  //printf( "nb_alg:%lu\tFLA_Strassen:\ttime = [%le], flops = [%le], diff = [%le]\n", nb_alg, dtime_best, gflops / dtime_best, diff);
+  fflush( stdout );
+ // }
 
 
   //FLA_Obj_show("C:", C, "%11.3e", "...END...");

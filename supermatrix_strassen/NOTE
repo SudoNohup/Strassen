@@ -1,0 +1,32 @@
+The thread number is 1. I cannot get it correctly!
+
+c557-604.stampede(22)$ ./run.sh 
+OMP: Info #204: KMP_AFFINITY: decoding x2APIC ids.
+OMP: Info #202: KMP_AFFINITY: Affinity capable, using global cpuid leaf 11 info
+OMP: Info #154: KMP_AFFINITY: Initial OS proc set respected: {14}
+OMP: Info #156: KMP_AFFINITY: 1 available OS procs
+OMP: Info #157: KMP_AFFINITY: Uniform topology
+OMP: Info #159: KMP_AFFINITY: 1 packages x 1 cores/pkg x 1 threads/core (1 total cores)
+OMP: Info #206: KMP_AFFINITY: OS proc to physical thread map:
+OMP: Info #171: KMP_AFFINITY: OS proc 14 maps to package 1 
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 0 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 1 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 2 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 3 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 4 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 5 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 6 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 2 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 3 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 4 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 5 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 6 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 7 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 2 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 3 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 4 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 5 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 6 bound to OS proc set {14}
+OMP: Info #242: KMP_AFFINITY: pid 57376 thread 7 bound to OS proc set {14}
+200010001617.289680e-012.194884e+01
+

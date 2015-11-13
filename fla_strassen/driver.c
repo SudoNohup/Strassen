@@ -5,8 +5,7 @@
 #include "FLAME.h"
 #include "Strassen_prototypes.h"
 
-
-int main() {
+int main(int argc, char **argv) {
   dim_t n, nb;
   int nrepeats, ireps;
   FLA_Obj A, B, C, Cref;
@@ -14,8 +13,16 @@ int main() {
 
   FLA_Init();
 
-  n = 1024 * 4;
+  //n = 1024 * 4;
   //nb = 1024;
+
+  if (argc != 3) {
+	printf("argument number is wrong!\n");
+	exit(0);
+  }
+  n  = atoi( argv[1] );
+  nb = atoi( argv[2] );
+
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &A );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &B );
   FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &C );
@@ -27,9 +34,10 @@ int main() {
   //FLA_Random_matrix( B );
   FLA_Set( FLA_ONE, B );
 
-  nrepeats = 1;
+  nrepeats = 3;
   gflops = 2.0 * n * n * n * 1.0e-9;
 
+  /*
   for (ireps = 0; ireps < nrepeats; ++ireps) {
 
 	FLA_Set( FLA_ZERO, Cref );
@@ -47,23 +55,25 @@ int main() {
   }
 
   printf( "FLA_Gemm:\ttime = [%le], flops = [%le]\n", dtime_best, gflops / dtime_best);
+  */
 
-  for (nb = 128; nb <= 4096; nb <<= 1) {
-	for (ireps = 0; ireps < nrepeats; ++ireps) {
+  //for (nb = 128; nb <= 4096; nb <<= 1) {
+  for (ireps = 0; ireps < nrepeats; ++ireps) {
 
-	  FLA_Set( FLA_ZERO, C);
+	FLA_Set( FLA_ZERO, C);
 
-	  dtime = FLA_Clock();
-	  FLA_Strassen(A, B, C, nb);
-	  dtime = FLA_Clock() - dtime;
+	dtime = FLA_Clock();
+	FLA_Strassen(A, B, C, nb);
+	dtime = FLA_Clock() - dtime;
 
-	  if(ireps == 0)
-		dtime_best = dtime;
-	  else 
-		dtime_best = dtime < dtime_best ? dtime : dtime_best;
-	}
-	printf( "nb:%d\tFLA_Strassen:\ttime = [%le], flops = [%le]\n", nb, dtime_best, gflops / dtime_best);
+	if(ireps == 0)
+	  dtime_best = dtime;
+	else 
+	  dtime_best = dtime < dtime_best ? dtime : dtime_best;
   }
+  //printf( "nb:%d\tFLA_Strassen:\ttime = [%le], flops = [%le]\n", nb, dtime_best, gflops / dtime_best);
+  printf( "%lu\t%lu\t%le\t%le\n", n, nb, dtime_best, gflops / dtime_best);
+  //}
 
   //diff = FLA_Max_elemwise_diff( C, Cref );
   //printf( "diff = [ %le]\n", diff );
