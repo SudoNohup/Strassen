@@ -7,13 +7,14 @@ CC         := icc
 FC         := ifort
 LINKER     := $(CC)
 #CFLAGS     := -O3 -Wall -I$(FLAME_INC) -msse3
+#CFLAGS     := -O3 -Wall -I$(FLAME_INC) -g -pg
 CFLAGS     := -O3 -Wall -I$(FLAME_INC)
 
 SRC_PATH   := .
 OBJ_PATH   := .
 
-#LDFLAGS       := -mkl=sequential -openmp -lm
-LDFLAGS       := -mkl=parallel -openmp -lm
+LDFLAGS       := -mkl=sequential -openmp -lm
+#LDFLAGS       := -mkl=parallel -openmp -lm -g -pg
 
 #LDFLAGS       := -I/usr/local/cuda/include -L/usr/local/cuda/lib64 -lcudart -lcublas -mkl=parallel -fopenmp -lgfortranbegin -lgfortran -lm
 #LDFLAGS      := -L/usr/local/cuda/lib64 -I/opt/intel/composer_xe_2013_sp1/mkl/include -L/opt/intel/composer_xe_2013_sp1/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lgfortran -lm -fopenmp

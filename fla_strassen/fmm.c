@@ -87,7 +87,7 @@ FLA_Error FLA_Part_Even_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
 
 
 FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, dim_t nb) {
-  int n;
+  int m, k, n;
   FLA_Obj A11, A12, A21, A22;
   FLA_Obj B11, B12, B21, B22;
   FLA_Obj C11, C12, C21, C22;
@@ -108,28 +108,30 @@ FLA_Error FLA_Strassen(FLA_Obj A, FLA_Obj B, FLA_Obj C, dim_t nb) {
 	return FLA_SUCCESS;
   }
 
-  n = FLA_Obj_length( A ) / 2;
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S1 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S2 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S3 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S4 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S5 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S6 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &S7 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T1 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T2 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T3 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T4 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T5 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T6 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &T7 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M1 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M2 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M3 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M4 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M5 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M6 );
-  FLA_Obj_create( FLA_DOUBLE, n, n, 0, 0, &M7 );
+  m = FLA_Obj_length( A ) / 2;
+  k = FLA_Obj_width( A )  / 2;
+  n = FLA_Obj_width( B )  / 2;
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S1 );  //S1 = A11 + A22
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S2 );  //S2 = A21 + A22
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S3 );
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S4 );
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S5 );
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S6 );
+  FLA_Obj_create( FLA_DOUBLE, m, k, 0, 0, &S7 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T1 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T2 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T3 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T4 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T5 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T6 );
+  FLA_Obj_create( FLA_DOUBLE, k, n, 0, 0, &T7 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M1 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M2 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M3 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M4 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M5 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M6 );
+  FLA_Obj_create( FLA_DOUBLE, m, n, 0, 0, &M7 );
 
 
   FLA_Set( FLA_ZERO, S1 );
